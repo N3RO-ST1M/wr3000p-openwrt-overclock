@@ -1,28 +1,30 @@
-# WR3000S: временный разгон CPU без прошивки BL2
+# WR3000S: runtime CPU overclocking without flashing BL2
 
-Исходники скрипта и kernel-модуля для разгона MT7981 в работающем OpenWrt. Меняется только текущая частота CPU. BL2, flash, Device Tree, напряжение и настройки VPN не изменяются. Автозапуска нет.
+Source code for an experimental MT7981 overclocking script and kernel module. Changes the CPU clock at runtime, without modifying BL2, flash partitions, Device Tree, voltage or VPN settings. No autostart.
 
-Только WR3000S v1 ubootmod, OpenWrt 25.12.5 r33051-f5dae5ece4, kernel 6.12.94 и ABI 5a6c1f71be683ae9980b15d3ce73e24d. На других сборках скрипт отказывается работать.
+Only WR3000S v1 ubootmod with OpenWrt 25.12.5 r33051-f5dae5ece4, kernel 6.12.94 and ABI 5a6c1f71be683ae9980b15d3ce73e24d is supported. The script refuses other builds.
 
-## Команды
+## Commands
 
-После сборки поместите oc.sh и совместимый mt7981_oc_hold.ko рядом в /tmp/wr3000s-oc. Выполните по SSH как root:
+After building, place oc.sh and the matching mt7981_oc_hold.ko together in /tmp/wr3000s-oc. Run over SSH as root:
 
 ```sh
 cd /tmp/wr3000s-oc
-sh ./oc.sh check       # совместимость и контрольная сумма
-sh ./oc.sh 1400        # включить 1400 МГц
-sh ./oc.sh 1500        # пример кастомной частоты
-sh ./oc.sh status      # состояние, температура и память
-sh ./oc.sh 1300        # снять разгон и проверить штатные регистры
+sh ./oc.sh check       # compatibility and module checksum
+sh ./oc.sh 1400        # request 1400 MHz
+sh ./oc.sh 1500        # custom frequency example
+sh ./oc.sh status      # state, temperature and available memory
+sh ./oc.sh 1300        # return to stock and verify registers
 ```
 
-Целые 1301..2000 МГц с шагом 1. Выше 1700 не рекомендуется и требуется --risk. Необязательный второй аргумент задаёт таймер возврата, например sh ./oc.sh 1640 120. Без него таймер выключен. После reboot со штатным BL2 снова будет 1300 МГц; /tmp очищается.
+Accepts integer frequencies from 1301 to 2000 MHz. Above 1700 MHz is not recommended and requires --risk. The optional second argument sets a return timer, for example sh ./oc.sh 1640 120. Without it, the timer is disabled.
 
-Вход ниже 70 °C, возврат при 74 °C, ошибке датчика или регистров, таймере или нормальной выгрузке модуля. Чужой модуль скрипт не заменяет.
+With a stock BL2, reboot restores 1300 MHz and clears /tmp. This package does not undo an overclock previously written into BL2.
 
-## Важно
+Entry requires a temperature below 70 °C. The module returns to stock at 74 °C, on sensor/register errors, timer expiry or normal unload. The script refuses to replace another tool's loaded module.
 
-На свой страх и риск. Новая кастомная сборка на железе не тестировалась. При полном зависании защита может не сработать, потребуется отключение питания. Возможны повреждения и потеря данных. Не запускать во время прошивки или обновления.
+## Use at your own risk
 
-В репозитории только исходники, без готовых .ko и архивов. [Сборка](source/BUILD.md) требует точного kernel build; после собственной сборки нужно обновить SHA модуля в oc.sh, не обходя проверки совместимости. Лицензия [GPL-2.0-only](LICENSE).
+The custom-frequency build has not been tested on hardware. A complete CPU freeze can prevent rollback and require a power cycle. Hardware damage and data loss are possible. Do not run during firmware flashing or updates.
+
+This repository contains source only, without prebuilt .ko files or archives. [Building](source/BUILD.md) requires the exact kernel build. Update the module SHA in oc.sh after your own build, without bypassing compatibility checks. License: [GPL-2.0-only](LICENSE).

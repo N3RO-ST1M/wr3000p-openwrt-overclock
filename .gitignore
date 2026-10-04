@@ -1,0 +1,17 @@
+# Source-only publication. Do not commit local builds or router backups.
+*.ko
+*.o
+*.a
+*.zip
+*.tar
+*.tar.gz
+*.mod
+*.mod.c
+.*.cmd
+Module.symvers
+modules.order
+build-info/
+build/
+output/
+backups/
+*.log

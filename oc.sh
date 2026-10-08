@@ -34,7 +34,7 @@ platform_check() {
   command -v "$cmd" >/dev/null || die "Missing required command: $cmd. Nothing installed."
  done
  test -f /tmp/sysinfo/board_name || die 'OpenWrt board identity is missing.'
- test "$(cat /tmp/sysinfo/board_name)" = cudy,wr3000s-v1-ubootmod || die 'Only WR3000S v1 ubootmod is supported.'
+ test "$(cat /tmp/sysinfo/board_name)" = cudy,wr3000p-v1-ubootmod || die 'Only WR3000P v1 ubootmod is supported.'
  test "$(uname -m)" = aarch64 || die 'Wrong architecture.'
  test "$(uname -r)" = 6.12.94 || die 'Only kernel 6.12.94 is supported.'
  test "$(uname -v)" = '#0 SMP Mon Jun 29 12:59:20 2026' || die 'Different kernel build timestamp. Refusing.'

@@ -1,0 +1,37 @@
+name: Build mt7981_oc_hold
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libssl-dev libelf-dev flex bison zstd bc kmod xz-utils
+
+      - name: Download and verify OpenWrt SDK 25.12.5
+        run: |
+          BASE=https://downloads.openwrt.org/releases/25.12.5/targets/mediatek/filogic
+          curl -fsSLO "$BASE/sha256sums"
+          grep 'openwrt-sdk-' sha256sums > sdk.sha256
+          cat sdk.sha256
+          F=$(awk '{print $2}' sdk.sha256 | tr -d '*')
+          curl -fsSLO "$BASE/$F"
+          sha256sum -c sdk.sha256
+          mkdir sdk
+          tar -xf "$F" -C sdk --strip-components=1
+          ls sdk
+
+      - name: Build module
+        run: sh source/build.sh "$PWD/source" "$PWD/out" "$PWD/sdk"
+
+      - name: Upload result
+        uses: actions/upload-artifact@v4
+        with:
+          name: mt7981_oc_hold
+          path: out/

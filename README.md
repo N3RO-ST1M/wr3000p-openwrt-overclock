@@ -1,4 +1,4 @@
-# WR3000S: runtime CPU overclocking without flashing BL2
+# WR3000P: runtime CPU overclocking without flashing BL2
 
 Source code for an experimental MT7981 overclocking script and kernel module. Changes the CPU clock at runtime, without modifying BL2, flash partitions, Device Tree, voltage or VPN settings. No autostart.
 

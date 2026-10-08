@@ -2,14 +2,14 @@
 
 Source code for an experimental MT7981 overclocking script and kernel module. Changes the CPU clock at runtime, without modifying BL2, flash partitions, Device Tree, voltage or VPN settings. No autostart.
 
-Only WR3000S v1 ubootmod with OpenWrt 25.12.5 r33051-f5dae5ece4, kernel 6.12.94 and ABI 5a6c1f71be683ae9980b15d3ce73e24d is supported. The script refuses other builds.
+Only WR3000P v1 ubootmod with OpenWrt 25.12.5 r33051-f5dae5ece4, kernel 6.12.94 and ABI 5a6c1f71be683ae9980b15d3ce73e24d is supported. The script refuses other builds.
 
 ## Commands
 
-After building, place oc.sh and the matching mt7981_oc_hold.ko together in /tmp/wr3000s-oc. Run over SSH as root:
+After building, place oc.sh and the matching mt7981_oc_hold.ko together in /tmp/wr3000p-oc. Run over SSH as root:
 
 ```sh
-cd /tmp/wr3000s-oc
+cd /tmp/wr3000p-oc
 sh ./oc.sh check       # compatibility and module checksum
 sh ./oc.sh 1400        # request 1400 MHz
 sh ./oc.sh 1500        # custom frequency example
